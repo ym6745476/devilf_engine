@@ -1,5 +1,5 @@
 ## [0.0.8] - 2021/08/15.
-Optimize  
+* Optimize  
 
 ## [0.0.7] - 2021/08/10.
 * New A * Best Path Algorithm  
