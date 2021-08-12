@@ -13,7 +13,7 @@ class DFLiving {
   double moveSpeed = 1;
 
   /// 是否死亡
-  bool isDead = false;
+  bool isDeath = false;
 
   /// 创建生物
   DFLiving(this.name);

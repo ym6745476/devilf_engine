@@ -123,9 +123,9 @@ class DFAnimationSprite extends DFSprite {
       } else if (key.contains("casting_")) {
         actionText = "casting_";
         action = DFAction.CASTING;
-      } else if (key.contains("dig_")) {
-        actionText = "dig_";
-        action = DFAction.DIG;
+      } else if (key.contains("collect_")) {
+        actionText = "collect_";
+        action = DFAction.COLLECT;
       } else if (key.contains("death_")) {
         actionText = "death_";
         action = DFAction.DEATH;

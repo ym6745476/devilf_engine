@@ -5,7 +5,7 @@ class DFAction {
   static const String RUN = "RUN";
   static const String ATTACK = "ATTACK";
   static const String CASTING = "CASTING";
-  static const String DIG = "DIG";
+  static const String COLLECT = "COLLECT";
   static const String DEATH = "DEATH";
   static const String TRACK = "TRACK";
   static const String EXPLODE = "EXPLODE";
@@ -64,14 +64,14 @@ class DFAnimation {
     DFAction.CASTING + DFDirection.DOWN, //30
     DFAction.CASTING + DFDirection.DOWN_LEFT, //31
 
-    DFAction.DIG + DFDirection.LEFT, //32
-    DFAction.DIG + DFDirection.UP_LEFT, //33
-    DFAction.DIG + DFDirection.UP, //34
-    DFAction.DIG + DFDirection.UP_RIGHT, //35
-    DFAction.DIG + DFDirection.RIGHT, //36
-    DFAction.DIG + DFDirection.DOWN_RIGHT, //37
-    DFAction.DIG + DFDirection.DOWN, //38
-    DFAction.DIG + DFDirection.DOWN_LEFT, //39
+    DFAction.COLLECT + DFDirection.LEFT, //32
+    DFAction.COLLECT + DFDirection.UP_LEFT, //33
+    DFAction.COLLECT + DFDirection.UP, //34
+    DFAction.COLLECT + DFDirection.UP_RIGHT, //35
+    DFAction.COLLECT + DFDirection.RIGHT, //36
+    DFAction.COLLECT + DFDirection.DOWN_RIGHT, //37
+    DFAction.COLLECT + DFDirection.DOWN, //38
+    DFAction.COLLECT + DFDirection.DOWN_LEFT, //39
 
     DFAction.DEATH + DFDirection.LEFT, //40
     DFAction.DEATH + DFDirection.UP_LEFT, //41
