@@ -15,7 +15,7 @@ class DFPosition {
   Offset toOffset() => Offset(x, y);
 
   @override
-  bool operator ==(Object other) {
+  bool operator == (Object other) {
     if (other is DFPosition) {
       return x == other.x && y == other.y;
     }
@@ -34,15 +34,15 @@ enum DFGravity {
   /// 左
   left,
 
-  /// 右
-  right,
-
   /// 上
   top,
 
-  /// 中
-  center,
+  /// 右
+  right,
 
   /// 下
-  bottom
+  bottom,
+
+  /// 中
+  center
 }

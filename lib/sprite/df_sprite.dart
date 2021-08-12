@@ -31,14 +31,11 @@ class DFSprite {
   /// 固定到屏幕
   bool fixed = false;
 
-  /// 显示
+  /// 显示状态
   bool visible = true;
 
-  /// 未使用的
-  bool isUsed = true;
-
-  /// 未使用时是否回收
-  bool recyclable = true;
+  /// 是否回收
+  bool recyclable = false;
 
   /// 创建精灵
   DFSprite({required this.position, required this.size});

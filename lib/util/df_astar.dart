@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:devilf_engine/core/df_position.dart';
+
 /// A*算法类
 class DFAStar {
   static const int BAR = 1; // 障碍
@@ -9,7 +11,7 @@ class DFAStar {
 
   List<DFNode> openList = [];
   List<DFNode> closeList = [];
-  List<DFCoord> pathList = [];
+  List<DFPosition> pathList = [];
 
   /// 开始算法
   void start(List<List<int>> blockMap, DFNode startNode, DFNode endNode) {
@@ -54,7 +56,7 @@ class DFAStar {
       DFCoord c = end.coord!;
       maps[c.y][c.x] = PATH;
       end = end.parent;
-      pathList.add(DFCoord(c.x, c.y));
+      pathList.add(DFPosition(c.x.toDouble(), c.y.toDouble()));
     }
   }
 

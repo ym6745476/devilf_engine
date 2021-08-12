@@ -216,13 +216,13 @@ class DFTileMapSprite extends DFSprite {
       }
 
       int columnCount = tileMap!.width!;
-      double realTiledWidth = this.tileMap!.tileWidth! * this.scale;
-      double realTiledHeight = this.tileMap!.tileHeight! * this.scale;
+      double scaledTiledWidth = this.tileMap!.tileWidth! * this.scale;
+      double scaledTiledHeight = this.tileMap!.tileHeight! * this.scale;
 
       /// 获取形状的4个点进行判断碰撞，比遍历性能会高很多
       for (int i = 0; i < points.length; i++) {
-        int row = (points[i].y / realTiledHeight).ceil() - 1;
-        int column = (points[i].x / realTiledWidth).ceil() - 1;
+        int row = (points[i].y / scaledTiledHeight).ceil() - 1;
+        int column = (points[i].x / scaledTiledWidth).ceil() - 1;
 
         /// print("row:" + row.toString() + ",column:" + column.toString());
         int index = row * columnCount + column;

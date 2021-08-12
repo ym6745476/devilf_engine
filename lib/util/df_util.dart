@@ -125,11 +125,11 @@ class DFUtil {
   static List<List<int>> to2dList(List<int> data,int columnSize,int fillValue) {
     int rowSize = (data.length / columnSize).ceil();
     List<List<int>> dataNew = List.generate(rowSize,(index)=> List.generate(columnSize, (index) => 0));
-    print(dataNew.toString());
+    /// print(dataNew.toString());
     for (int i = 0; i < data.length; i++) {
       int row = (i / columnSize).floor();
       int column = i % columnSize;
-      print(row.toString() +","+ column.toString()+ ",value:" + data[i].toString());
+      /// print(row.toString() +","+ column.toString()+ ",value:" + data[i].toString());
       if (data[i] != 0) {
         dataNew[row][column] = 1;
       } else {
