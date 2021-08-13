@@ -172,7 +172,7 @@ class DFAnimationSprite extends DFSprite {
   }
 
   /// 播放动画
-  void play(String animation, {stepTime = 200, loop = true, onComplete}) {
+  void play(String animation, {int stepTime = 200,bool loop = true, onComplete}) {
     if (this.currentAnimation != animation) {
       this.currentIndex = 0;
       this.currentAnimation = animation;
