@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 import 'package:flutter/widgets.dart';
 
-/// 音频播放
+/// 音效播放
 class DFAudio {
   /// 音频类
   static AudioCache audioCache = AudioCache(prefix: 'assets/audio/');
@@ -16,29 +16,30 @@ class DFAudio {
   /// 定时播放
   Timer? timer;
 
-  void startPlay(List<String> files,{loop = false}) {
+  /// 开始播放音效序列
+  void startPlay(List<String> files, {stepTime = 400, loop = false}) {
     count = 0;
-    timer = Timer.periodic(Duration(milliseconds: 200), (t) {
+    timer = Timer.periodic(Duration(milliseconds: stepTime), (t) {
       if (count == files.length) {
-        if(loop){
+        if (loop) {
           count = 0;
           String file = files.elementAt(count);
           play(file);
-        }else{
+        } else {
           timer!.cancel();
           timer = null;
         }
-      }else{
+      } else {
         String file = files.elementAt(count);
         play(file);
       }
-      count ++;
+      count++;
     });
   }
 
-  /// 取消播放
- void stopPlay(){
-    if(timer!=null){
+  /// 取消播放音效序列
+  void stopPlay() {
+    if (timer != null) {
       timer!.cancel();
       timer = null;
       count = 0;
@@ -69,6 +70,7 @@ class DFAudio {
   }
 }
 
+/// 背景音乐
 class BackgroundMusic extends WidgetsBindingObserver {
   bool _isRegistered = false;
   late AudioCache audioCache;
@@ -85,14 +87,6 @@ class BackgroundMusic extends WidgetsBindingObserver {
     WidgetsBinding.instance?.addObserver(this);
   }
 
-  void dispose() {
-    if (!_isRegistered) {
-      return;
-    }
-    WidgetsBinding.instance?.removeObserver(this);
-    _isRegistered = false;
-  }
-
   Future<void> play(String filename, {double volume = 1}) async {
     final currentPlayer = audioPlayer;
     if (currentPlayer != null && currentPlayer.state != PlayerState.STOPPED) {
@@ -102,6 +96,16 @@ class BackgroundMusic extends WidgetsBindingObserver {
     isPlaying = true;
     audioPlayer = await audioCache.loop(filename, volume: volume);
   }
+
+  Future<Uri> load(String file) => audioCache.load(file);
+
+  Future<File> loadAsFile(String file) => audioCache.loadAsFile(file);
+
+  Future<List<Uri>> loadAll(List<String> files) => audioCache.loadAll(files);
+
+  void clear(Uri file) => audioCache.clear(file);
+
+  void clearAll() => audioCache.clearAll();
 
   Future<void> stop() async {
     isPlaying = false;
@@ -124,15 +128,13 @@ class BackgroundMusic extends WidgetsBindingObserver {
     }
   }
 
-  Future<Uri> load(String file) => audioCache.load(file);
-
-  Future<File> loadAsFile(String file) => audioCache.loadAsFile(file);
-
-  Future<List<Uri>> loadAll(List<String> files) => audioCache.loadAll(files);
-
-  void clear(Uri file) => audioCache.clear(file);
-
-  void clearAll() => audioCache.clearAll();
+  void dispose() {
+    if (!_isRegistered) {
+      return;
+    }
+    WidgetsBinding.instance?.removeObserver(this);
+    _isRegistered = false;
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

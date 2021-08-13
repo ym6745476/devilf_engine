@@ -200,5 +200,8 @@ class DFJoyStickState extends State<DFJoyStick> {
 
     /// 返回结果
     widget.onCancel(widget.direction);
+
+    /// 归位
+    widget.direction = DFDirection.NONE;
   }
 }
