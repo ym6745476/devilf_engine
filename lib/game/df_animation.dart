@@ -9,7 +9,6 @@ class DFAction {
   static const String DEATH = "DEATH";
   static const String TRACK = "TRACK";
   static const String EXPLODE = "EXPLODE";
-  static const String SURROUND = "SURROUND";
 }
 
 /// 方向常量
@@ -84,6 +83,5 @@ class DFAnimation {
 
     DFAction.TRACK + DFDirection.UP, //48
     DFAction.EXPLODE + DFDirection.UP, //49
-    DFAction.SURROUND + DFDirection.UP, //50
   ];
 }

@@ -135,9 +135,6 @@ class DFAnimationSprite extends DFSprite {
       } else if (key.contains("explode_")) {
         actionText = "explode_";
         action = DFAction.EXPLODE;
-      } else if (key.contains("surround_")) {
-        actionText = "surround_";
-        action = DFAction.SURROUND;
       }
 
       String keyNumber = key.replaceAll(actionText, "").replaceAll(".png", "");

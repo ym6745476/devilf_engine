@@ -7,8 +7,11 @@ import 'package:flutter/widgets.dart';
 
 /// 音效播放
 class DFAudio {
+
+  static String prefix = "assets/audio/";
+
   /// 音频类
-  static AudioCache audioCache = AudioCache(prefix: 'assets/audio/');
+  static AudioCache audioCache = AudioCache(prefix: prefix);
 
   /// 计数
   int count = 0;
@@ -18,6 +21,9 @@ class DFAudio {
 
   /// 开始播放音效序列
   void startPlay(List<String> files, {stepTime = 400, loop = false}) {
+    if(files.length == 0){
+      return;
+    }
     count = 0;
     timer = Timer.periodic(Duration(milliseconds: stepTime), (t) {
       if (count == files.length) {
