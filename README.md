@@ -27,7 +27,7 @@ https://ymbok.com/book/devilf.html
 https://github.com/ym6745476/devilf  
 
 ## Online Demo    
-https://ymbok.com/example/devilf.html  
+https://ymbok.com/download/devilf.html    
 
 ## Install  
 ```yaml
