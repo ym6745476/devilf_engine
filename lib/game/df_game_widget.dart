@@ -70,9 +70,28 @@ class DFGameWidget extends LeafRenderObjectWidget {
 
     /// 跟随摄像机的精灵
     if (camera.sprite != null) {
-      canvas.translate(camera.rect.width / 2, camera.rect.height / 2);
-      canvas.scale(camera.zoom);
-      canvas.translate(-camera.sprite!.position.x, -camera.sprite!.position.y);
+      if (camera.limit != null) {
+        /// 限制边界
+        double moveX = camera.rect.width / 2 - camera.sprite!.position.x;
+        double moveY = camera.rect.height / 2 - camera.sprite!.position.y;
+
+        if (camera.sprite!.position.x <= camera.rect.width / 2) {
+          moveX = 0;
+        }
+        if (camera.sprite!.position.y <= camera.rect.height / 2) {
+          moveY = 0;
+        }
+        if (camera.sprite!.position.x >= camera.limit!.dx - camera.rect.width / 2) {
+          moveX = camera.rect.width - camera.limit!.dx;
+        }
+        if (camera.sprite!.position.y >= camera.limit!.dy - camera.rect.height / 2) {
+          moveY = camera.rect.height - camera.limit!.dy;
+        }
+        canvas.translate(moveX, moveY);
+      } else {
+        canvas.translate(
+            camera.rect.width / 2 - camera.sprite!.position.x, camera.rect.height / 2 - camera.sprite!.position.y);
+      }
     }
 
     children.forEach((sprite) {

@@ -25,8 +25,8 @@ class DFRect extends DFShape {
 
   /// 创建矩形
   DFRect(this.left, this.top, this.width, this.height) {
-    right = this.left + this.width;
-    bottom = this.top + this.height;
+    this.right = this.left + this.width;
+    this.bottom = this.top + this.height;
   }
 
   /// 转换为Rect
