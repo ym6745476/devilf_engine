@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/devilf-0.0.8-orange" />
+    <img src="https://img.shields.io/badge/devilf-0.0.9-orange" />
     <img src="https://img.shields.io/badge/flutter-2.2.3-green" />
 </p>
 
@@ -27,10 +27,10 @@ https://ymbok.com/book/devilf.html
 https://github.com/ym6745476/devilf  
 
 ## Online Demo    
-https://ymbok.com/download/devilf.html    
+https://ymbok.com/download/slayer.html  
 
 ## Install  
 ```yaml
 dependencies:
-  devilf: ^0.0.8
+  devilf: ^0.0.9
 ```
