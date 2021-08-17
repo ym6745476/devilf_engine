@@ -77,12 +77,12 @@ class DFTileMapSprite extends DFSprite {
 
     /// 保存上一下刷新时摄像机的位置
     this.cameraPosition = DFPosition(camera.sprite!.position.x, camera.sprite!.position.y);
-    double drawX = camera.sprite!.position.x - camera.rect.width / 2;
-    double drawY = camera.sprite!.position.y - camera.rect.height / 2;
+    double drawX = camera.sprite!.position.x - camera.rect.width;
+    double drawY = camera.sprite!.position.y - camera.rect.height;
 
     /// 可视区域
-    DFRect visibleRect = DFRect(drawX, drawY, camera.rect.width + this.tileMap!.tileWidth! * 10 * scale,
-        camera.rect.height + this.tileMap!.tileHeight! * 10 * scale);
+    DFRect visibleRect = DFRect(drawX, drawY, camera.rect.width * 2,
+        camera.rect.height * 2);
 
     /// print("visibleRect:" + visibleRect.toString());
 

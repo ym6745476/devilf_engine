@@ -6,10 +6,10 @@ import 'df_shape.dart';
 /// 矩形
 class DFRect extends DFShape {
   /// 左坐标
-  final double left;
+  double left = 0;
 
   /// 上坐标
-  final double top;
+  double top = 0;
 
   /// 右坐标
   double right = 0;
@@ -25,6 +25,14 @@ class DFRect extends DFShape {
 
   /// 创建矩形
   DFRect(this.left, this.top, this.width, this.height) {
+    this.right = this.left + this.width;
+    this.bottom = this.top + this.height;
+  }
+
+  /// 创建矩形
+  DFRect.fromCenter({ required DFPosition center, required this.width, required this.height}) {
+    this.left = center.x - width / 2;
+    this.top = center.y - height / 2;
     this.right = this.left + this.width;
     this.bottom = this.top + this.height;
   }
