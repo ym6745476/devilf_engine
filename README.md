@@ -21,7 +21,7 @@
 </p>
 
 ## Docs 
-https://ymbok.com/book/devilf.html  
+https://ymbok.com/book/devilf.html    
 
 ## Example      
 https://github.com/ym6745476/devilf  
