@@ -12,7 +12,7 @@ class DFUiUtil {
         return child;
       },
     ).then((val) {
-      print(val);
+      print("关闭窗口：" + val.toString());
     });
   }
 }
