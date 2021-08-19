@@ -60,13 +60,17 @@ class DFGameWidget extends LeafRenderObjectWidget {
       }
     });
 
-    /// 清楚不可见的并且需要回收的的精灵
+    /// 清除不可见的并且需要回收的的精灵
     children.removeWhere((sprite) => (sprite.visible == false && sprite.recyclable));
   }
 
   /// 绘制界面
   void render(Canvas canvas) {
     canvas.save();
+
+    /// 已移动的位置
+    double translatedX = camera.sprite!.position.x - camera.rect.width / 2;
+    double translatedY = camera.sprite!.position.y - camera.rect.height / 2;
 
     /// 跟随摄像机的精灵
     if (camera.sprite != null) {

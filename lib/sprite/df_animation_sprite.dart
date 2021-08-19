@@ -168,6 +168,12 @@ class DFAnimationSprite extends DFSprite {
     this.bindSprites.add(sprite);
   }
 
+  /// 移除绑定精灵
+  void removeBindChild(DFAnimationSprite sprite) {
+    sprite.visible = false;
+    sprite.recyclable = true;
+  }
+
   /// 播放动画
   void play(String animation, {int stepTime = 200,bool loop = true, onComplete}) {
     if (this.currentAnimation != animation) {
@@ -209,6 +215,7 @@ class DFAnimationSprite extends DFSprite {
         }
       }
     }
+    super.update(dt);
   }
 
   /// 精灵渲染
@@ -244,11 +251,15 @@ class DFAnimationSprite extends DFSprite {
     }
 
     /// 渲染绑定精灵
-    bindSprites.forEach((element) {
-      element.currentIndex = this.currentIndex;
-      element.currentAnimation = this.currentAnimation;
-      element.currentAnimationFlippedX = currentAnimationFlippedX;
-      element.render(canvas);
+    bindSprites.forEach((sprite) {
+      if (sprite.visible) {
+        /// 绑定精灵帧数不一定完全对应 所以这里计算一下接近值，保证速度和最后动画结束时间一致
+        double offset = sprite.frames[this.currentAnimation]!.length / this.frames[this.currentAnimation]!.length;
+        sprite.currentIndex = (this.currentIndex * offset).round();
+        sprite.currentAnimation = this.currentAnimation;
+        sprite.currentAnimationFlippedX = currentAnimationFlippedX;
+        sprite.render(canvas);
+      }
     });
 
     /// 画布恢复

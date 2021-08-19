@@ -47,6 +47,13 @@ class DFSprite {
     children.add(sprite);
   }
 
+  /// 移除子精灵
+  void removeChild(DFSprite sprite) {
+    sprite.parent = null;
+    sprite.visible = false;
+    sprite.recyclable = true;
+  }
+
   /// 增加精灵 增加进来精灵才能被绘制
   void addChildren(List<DFSprite> sprites) {
     sprites.forEach((sprite) {
@@ -65,6 +72,8 @@ class DFSprite {
   /// 精灵更新
   void update(double dt) {
     /// 子类覆盖
+    /// 清除不可见的并且需要回收的的精灵
+    children.removeWhere((sprite) => (sprite.visible == false && sprite.recyclable));
   }
 
   /// 精灵渲染
