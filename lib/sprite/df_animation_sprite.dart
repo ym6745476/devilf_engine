@@ -72,6 +72,7 @@ class DFAnimationSprite extends DFSprite {
     Map<String, dynamic> jsonMap = await DFAssetsLoader.loadJson(json);
     ui.Image image = await DFAssetsLoader.loadImage(json.replaceAll(".json", ".png"));
     final jsonFrames = jsonMap['frames'] as Map<String, dynamic>;
+
     /// final jsonMetadata = jsonMap['metadata'] as Map<String, dynamic>;
     jsonFrames.forEach((key, value) {
       final map = value as Map;
@@ -96,6 +97,7 @@ class DFAnimationSprite extends DFSprite {
             double.parse(frameText[2]));
         frameOffset = DFOffset(double.parse(offsetText[1]), double.parse(offsetText[0]));
       }
+
       /// print("frameSize:" + frameRect.toString());
       /// print("frameOffset:" + frameOffset.toString());
 
@@ -175,7 +177,7 @@ class DFAnimationSprite extends DFSprite {
   }
 
   /// 播放动画
-  void play(String animation, {int stepTime = 200,bool loop = true, onComplete}) {
+  void play(String animation, {int stepTime = 200, bool loop = true, onComplete}) {
     if (this.currentAnimation != animation) {
       this.currentIndex = 0;
       this.currentAnimation = animation;
@@ -197,6 +199,7 @@ class DFAnimationSprite extends DFSprite {
     /// 控制动画帧切换
     if (this.frames[this.currentAnimation] != null && this.frames[this.currentAnimation]!.length > 0) {
       List<DFImageSprite> sprites = this.frames[this.currentAnimation]!;
+
       /// 控制动画帧按照stepTime进行更新
       if (DateTime.now().millisecondsSinceEpoch - this.frameClock > this.stepTime) {
         this.frameClock = DateTime.now().millisecondsSinceEpoch;
@@ -252,7 +255,9 @@ class DFAnimationSprite extends DFSprite {
 
     /// 渲染绑定精灵
     bindSprites.forEach((sprite) {
-      if (sprite.visible) {
+      if (sprite.visible &&
+          sprite.frames[this.currentAnimation] != null &&
+          this.frames[this.currentAnimation] != null) {
         /// 绑定精灵帧数不一定完全对应 所以这里计算一下接近值，保证速度和最后动画结束时间一致
         double offset = sprite.frames[this.currentAnimation]!.length / this.frames[this.currentAnimation]!.length;
         sprite.currentIndex = (this.currentIndex * offset).round();

@@ -68,16 +68,16 @@ class DFGameWidget extends LeafRenderObjectWidget {
   void render(Canvas canvas) {
     canvas.save();
 
-    /// 已移动的位置
-    double translatedX = camera.sprite!.position.x - camera.rect.width / 2;
-    double translatedY = camera.sprite!.position.y - camera.rect.height / 2;
+    /// 需要移动的位置
+    double moveX = 0;
+    double moveY = 0;
 
     /// 跟随摄像机的精灵
     if (camera.sprite != null) {
       if (camera.limit != null) {
         /// 限制边界
-        double moveX = camera.rect.width / 2 - camera.sprite!.position.x;
-        double moveY = camera.rect.height / 2 - camera.sprite!.position.y;
+        moveX = camera.rect.width / 2 - camera.sprite!.position.x;
+        moveY = camera.rect.height / 2 - camera.sprite!.position.y;
 
         if (camera.sprite!.position.x <= camera.rect.width / 2) {
           moveX = 0;
@@ -91,11 +91,11 @@ class DFGameWidget extends LeafRenderObjectWidget {
         if (camera.sprite!.position.y >= camera.limit!.dy - camera.rect.height / 2) {
           moveY = camera.rect.height - camera.limit!.dy;
         }
-        canvas.translate(moveX, moveY);
       } else {
-        canvas.translate(
-            camera.rect.width / 2 - camera.sprite!.position.x, camera.rect.height / 2 - camera.sprite!.position.y);
+        moveX = camera.rect.width / 2 - camera.sprite!.position.x;
+        moveY = camera.rect.height / 2 - camera.sprite!.position.y;
       }
+      canvas.translate(moveX, moveY);
     }
 
     children.forEach((sprite) {
@@ -108,8 +108,7 @@ class DFGameWidget extends LeafRenderObjectWidget {
 
     /// 固定到屏幕位置的精灵
     if (camera.sprite != null) {
-      canvas.translate(
-          camera.sprite!.position.x - camera.rect.width / 2, camera.sprite!.position.y - camera.rect.height / 2);
+      canvas.translate(-moveX, -moveY);
     }
     children.forEach((sprite) {
       if (sprite.visible) {
