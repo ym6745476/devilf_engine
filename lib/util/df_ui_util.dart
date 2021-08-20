@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// UI工具类
 class DFUiUtil {
   ///显示弹出框
-  static showLayer(BuildContext context, Widget child){
+  static showLayer(BuildContext context, Widget child, {Function? onClosed}) {
     showDialog<Null>(
       context: context,
       barrierDismissible: false,
@@ -13,6 +13,9 @@ class DFUiUtil {
       },
     ).then((val) {
       print("关闭窗口：" + val.toString());
+      if (onClosed != null) {
+        onClosed(val);
+      }
     });
   }
 }
