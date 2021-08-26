@@ -65,6 +65,7 @@ class DFAnimationSprite extends DFSprite {
   ///   }
   /// }
   static Future<DFAnimationSprite> load(String json, {scale = 0.5, blendMode = BlendMode.srcOver}) async {
+    print("DFAnimationSprite Load:" + json);
     DFAnimationSprite animationSprite = DFAnimationSprite(stepTime: 100, loop: true);
     DFAnimation.keys.forEach((element) {
       animationSprite.frames[element] = [];

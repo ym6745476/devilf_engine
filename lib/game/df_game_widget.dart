@@ -26,9 +26,23 @@ class DFGameWidget extends LeafRenderObjectWidget {
     }
   }
 
+  /// 插入精灵 增加进来精灵才能被绘制
+  void insertChild(int index,DFSprite? sprite) {
+    if (sprite != null) {
+      children.insert(index,sprite);
+    }
+  }
+
   /// 增加精灵 增加进来精灵才能被绘制
   void addChildren(List<DFSprite> sprites) {
     children.addAll(sprites);
+  }
+
+  /// 插入精灵 增加进来精灵才能被绘制
+  void insertChildren(int index,List<DFSprite> sprites) {
+    sprites.forEach((element) {
+      children.insert(index,element);
+    });
   }
 
   /// 删除精灵
