@@ -20,6 +20,9 @@
    Some Documentation Of How To Use It Can Be Found Here.
 </p>
 
+## Home  
+https://devilf.com  
+
 ## Docs 
 https://ymbok.com/book/devilf.html    
 
