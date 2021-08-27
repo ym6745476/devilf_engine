@@ -4,23 +4,23 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
-import 'df_game_widget.dart';
 import 'df_game_loop.dart';
+import 'df_sprite_widget.dart';
 
-/// 游戏RenderBox
-class DFGameRenderBox extends RenderBox with WidgetsBindingObserver {
+/// 精灵渲染盒
+class DFSpriteRenderBox extends RenderBox with WidgetsBindingObserver {
   /// 上下文
   BuildContext context;
 
-  /// 游戏控件
-  DFGameWidget gameWidget;
+  /// 精灵控件
+  DFSpriteWidget spriteWidget;
 
   /// 游戏循环
   DFGameLoop? gameLoop;
 
   /// 创建渲染盒
-  DFGameRenderBox(this.context, this.gameWidget) {
-    WidgetsBinding.instance!.addTimingsCallback(gameWidget.onTimingsCallback);
+  DFSpriteRenderBox(this.context, this.spriteWidget) {
+    WidgetsBinding.instance!.addTimingsCallback(spriteWidget.onTimingsCallback);
   }
 
   /// 附加
@@ -50,7 +50,7 @@ class DFGameRenderBox extends RenderBox with WidgetsBindingObserver {
     if (!attached) {
       return;
     }
-    gameWidget.update(dt);
+    spriteWidget.update(dt);
     markNeedsPaint();
   }
 
@@ -59,9 +59,23 @@ class DFGameRenderBox extends RenderBox with WidgetsBindingObserver {
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
     context.canvas.translate(offset.dx, offset.dy);
-    gameWidget.render(context.canvas);
+    spriteWidget.render(context.canvas);
     context.canvas.restore();
   }
+
+  /// 事件分发
+  @override
+  bool hitTest(HitTestResult result, {required Offset position}) {
+    if (size.contains(position)) {
+      result.add(BoxHitTestEntry(this, position));
+      return true;
+    }
+    return false;
+  }
+
+  /// 事件分发
+  @override
+  bool hitTestSelf(Offset position) => true;
 
   /// 重绘
   @override
@@ -80,7 +94,7 @@ class DFGameRenderBox extends RenderBox with WidgetsBindingObserver {
   /// 状态改变
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    gameWidget.lifecycleStateChange(state);
+    spriteWidget.lifecycleStateChange(state);
   }
 
   /// 监听Widget状态

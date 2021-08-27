@@ -1,3 +1,9 @@
+## [0.1.0] - 2021/08/28.  
+* Optimize  
+* GameWidget Support GestureDetector  
+* Update GameRenderBox as  SpriteRenderBox  
+* New SpriteWidget Class    
+
 ## [0.0.9] - 2021/08/19.  
 * Optimize  
 * New CheckButton Widget  

@@ -1,148 +1,104 @@
 import 'dart:ui';
+import 'package:devilf_engine/core/df_circle.dart';
+import 'package:devilf_engine/core/df_position.dart';
 import 'package:devilf_engine/sprite/df_sprite.dart';
 import 'package:flutter/material.dart';
 import 'df_camera.dart';
-import 'df_game_render_box.dart';
+import 'df_sprite_widget.dart';
 
-/// 游戏主循环
-/// 继承LeafRenderObjectWidget实现RenderBox可以使用canvas实现Widget
-class DFGameWidget extends LeafRenderObjectWidget {
+/// 游戏控件
+class DFGameWidget extends StatelessWidget {
+  /// 尺寸
+  final Size size;
+
   /// 摄像机
   final DFCamera camera;
 
-  /// 游戏里的所有精灵
-  final List<DFSprite> children = [];
+  /// 精灵控件
+  late DFSpriteWidget spriteWidget;
+
+  /// 点击抬起
+  Function(DFSprite sprite)? onTap;
 
   /// 当前帧数
   double fps = 60;
 
   /// 创建游戏控件
-  DFGameWidget({required this.camera});
+  DFGameWidget({
+    this.size = const Size(100, 100),
+    required this.camera,
+    this.onTap,
+  }) {
+    this.spriteWidget = DFSpriteWidget(
+        camera: this.camera,
+        onTimingsCallback: (List<FrameTiming> timings) {
+          this.fps = 1 / (timings[0].totalSpan.inMilliseconds / 1000.0);
+        });
+  }
 
   /// 增加精灵 增加进来精灵才能被绘制
   void addChild(DFSprite? sprite) {
-    if (sprite != null) {
-      children.add(sprite);
-    }
+    this.spriteWidget.addChild(sprite);
   }
 
   /// 插入精灵 增加进来精灵才能被绘制
-  void insertChild(int index,DFSprite? sprite) {
-    if (sprite != null) {
-      children.insert(index,sprite);
-    }
+  void insertChild(int index, DFSprite? sprite) {
+    this.spriteWidget.insertChild(index, sprite);
   }
 
   /// 增加精灵 增加进来精灵才能被绘制
   void addChildren(List<DFSprite> sprites) {
-    children.addAll(sprites);
+    this.spriteWidget.addChildren(sprites);
   }
 
   /// 插入精灵 增加进来精灵才能被绘制
-  void insertChildren(int index,List<DFSprite> sprites) {
-    sprites.forEach((element) {
-      children.insert(index,element);
-    });
+  void insertChildren(int index, List<DFSprite> sprites) {
+    this.spriteWidget.insertChildren(index, sprites);
   }
 
   /// 删除精灵
   void removeChild(DFSprite sprite) {
-    /// 不能直接remove会并发修改错误
-    sprite.visible = false;
-    sprite.recyclable = true;
+    this.spriteWidget.removeChild(sprite);
   }
 
-  /// 创建GameRenderBox
-  @override
-  RenderBox createRenderObject(BuildContext context) {
-    return DFGameRenderBox(context, this);
-  }
-
-  /// 设置Game到GameRenderBox
-  @override
-  void updateRenderObject(BuildContext context, DFGameRenderBox renderObject) {
-    renderObject.gameWidget = this;
-  }
-
-  /// 更新界面
-  void update(double dt) {
-    children.forEach((sprite) {
-      if (!sprite.visible && sprite.recyclable) {
-        /// 将要回收的精灵不更新
-      } else {
-        sprite.update(dt);
-      }
-    });
-
-    /// 清除不可见的并且需要回收的的精灵
-    children.removeWhere((sprite) => (sprite.visible == false && sprite.recyclable));
-  }
-
-  /// 绘制界面
-  void render(Canvas canvas) {
-    canvas.save();
-
-    /// 需要移动的位置
-    double moveX = 0;
-    double moveY = 0;
-
-    /// 跟随摄像机的精灵
-    if (camera.sprite != null) {
-      if (camera.limit != null) {
-        /// 限制边界
-        moveX = camera.rect.width / 2 - camera.sprite!.position.x;
-        moveY = camera.rect.height / 2 - camera.sprite!.position.y;
-
-        if (camera.sprite!.position.x <= camera.rect.width / 2) {
-          moveX = 0;
-        }
-        if (camera.sprite!.position.y <= camera.rect.height / 2) {
-          moveY = 0;
-        }
-        if (camera.sprite!.position.x >= camera.limit!.dx - camera.rect.width / 2) {
-          moveX = camera.rect.width - camera.limit!.dx;
-        }
-        if (camera.sprite!.position.y >= camera.limit!.dy - camera.rect.height / 2) {
-          moveY = camera.rect.height - camera.limit!.dy;
-        }
-      } else {
-        moveX = camera.rect.width / 2 - camera.sprite!.position.x;
-        moveY = camera.rect.height / 2 - camera.sprite!.position.y;
-      }
-      canvas.translate(moveX, moveY);
+  /// 屏幕坐标转换为世界坐标
+  DFPosition screenToWorldPosition(Offset localPosition){
+    if(this.camera.sprite != null){
+      /// 屏幕上的坐标转换为实际坐标 计算出屏幕的0点的实际地图坐标
+      double moveX = this.camera.sprite!.position.x - this.camera.rect.width / 2;
+      double moveY = this.camera.sprite!.position.y - this.camera.rect.height / 2;
+      return DFPosition(localPosition.dx + moveX, localPosition.dy + moveY);
+    }else{
+      return DFPosition(localPosition.dx, localPosition.dy);
     }
+  }
 
-    children.forEach((sprite) {
-      if (sprite.visible) {
-        if (!sprite.fixed) {
-          sprite.render(canvas);
+  /// 点击监听
+  void onTapUp(TapUpDetails details) {
+    print("监听到点击：" + details.localPosition.toString());
+    for (int i = this.spriteWidget.children.length - 1; i >= 0; i--) {
+      DFSprite sprite = this.spriteWidget.children[i];
+      /// 屏幕坐标转换为世界坐标
+      DFPosition center = screenToWorldPosition(details.localPosition);
+      if (sprite.getCollisionShape().overlaps(DFCircle(center, 5))) {
+        if (this.onTap != null) {
+          this.onTap!(sprite);
         }
+        return;
       }
-    });
-
-    /// 固定到屏幕位置的精灵
-    if (camera.sprite != null) {
-      canvas.translate(-moveX, -moveY);
     }
-    children.forEach((sprite) {
-      if (sprite.visible) {
-        if (sprite.fixed) {
-          sprite.render(canvas);
-        }
-      }
-    });
-
-    canvas.restore();
   }
 
-  /// 显示FPS
-  void onTimingsCallback(List<FrameTiming> timings) {
-    this.fps = 1 / (timings[0].totalSpan.inMilliseconds / 1000.0);
-    //print(Game.fps);
-  }
-
-  /// 生命周期发生变化
-  void lifecycleStateChange(AppLifecycleState state) {
-    //
+  /// 控件布局
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        width: this.size.width,
+        height: this.size.height,
+        child: spriteWidget,
+      ),
+      onTapUp: this.onTapUp,
+    );
   }
 }

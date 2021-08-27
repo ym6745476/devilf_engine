@@ -9,14 +9,14 @@ class DFAStar {
   static const int DIRECT_VALUE = 10; // 横竖移动代价
   static const int OBLIQUE_VALUE = 14; // 斜移动代价
 
-  List<DFMapNode> _openList = [];
-  List<DFMapNode> _closeList = [];
-  List<DFMapPosition> _pathList = [];
+  List<DFAStarNode> _openList = [];
+  List<DFAStarNode> _closeList = [];
+  List<DFTilePosition> _pathList = [];
 
   /// 开始算法
-  Future<List<DFMapPosition>> start(List<List<int>> blockMap, DFMapNode startNode, DFMapNode endNode) async {
+  Future<List<DFTilePosition>> start(List<List<int>> blockMap, DFAStarNode startNode, DFAStarNode endNode) async {
     /// Map数据
-    DFMap map = DFMap(blockMap, blockMap[0].length, blockMap.length, startNode, endNode);
+    DFAStarMap map = DFAStarMap(blockMap, blockMap[0].length, blockMap.length, startNode, endNode);
 
     /// clean
     _openList.clear();
@@ -40,10 +40,10 @@ class DFAStar {
   }
 
   /// 移动当前结点
-  void moveNodes(DFMap map) {
+  void moveNodes(DFAStarMap map) {
     while (_openList.length > 0) {
       /// 第一个元素
-      DFMapNode current = _openList.removeAt(0);
+      DFAStarNode current = _openList.removeAt(0);
       _closeList.add(current);
       addNeighborNodeInOpen(map, current);
       if (isPositionInClose(map.end.position)) {
@@ -54,19 +54,19 @@ class DFAStar {
   }
 
   /// 在二维数组中绘制路径
-  void drawPath(List<List<int>>? maps, DFMapNode? end) {
+  void drawPath(List<List<int>>? maps, DFAStarNode? end) {
     if (end == null || maps == null) return;
     print("总代价：" + end.G.toString());
     while (end != null) {
-      DFMapPosition c = end.position!;
+      DFTilePosition c = end.position!;
       maps[c.y][c.x] = PATH;
       end = end.parent;
-      _pathList.add(DFMapPosition(c.x, c.y));
+      _pathList.add(DFTilePosition(c.x, c.y));
     }
   }
 
   /// 添加所有邻结点到open表
-  void addNeighborNodeInOpen(DFMap mapInfo, DFMapNode current) {
+  void addNeighborNodeInOpen(DFAStarMap mapInfo, DFAStarNode current) {
     int x = current.position!.x;
     int y = current.position!.y;
     // 左
@@ -88,12 +88,12 @@ class DFAStar {
   }
 
   /// 添加一个邻结点到open表
-  void addNeighborNodeInOpenXy(DFMap mapInfo, DFMapNode current, int x, int y, int value) {
+  void addNeighborNodeInOpenXy(DFAStarMap mapInfo, DFAStarNode current, int x, int y, int value) {
     if (canAddNodeToOpen(mapInfo, x, y)) {
-      DFMapNode end = mapInfo.end;
-      DFMapPosition position = DFMapPosition(x, y);
+      DFAStarNode end = mapInfo.end;
+      DFTilePosition position = DFTilePosition(x, y);
       int G = current.G + value; // 计算邻结点的G值
-      DFMapNode? child = findNodeInOpen(position);
+      DFAStarNode? child = findNodeInOpen(position);
       if (child == null) {
         int H = calcH(end.position!, position); // 计算H值
         if (isEndNode(end.position!, position)) {
@@ -102,7 +102,7 @@ class DFAStar {
           child.G = G;
           child.H = H;
         } else {
-          child = DFMapNode.newNode(position, current, G, H);
+          child = DFAStarNode.newNode(position, current, G, H);
         }
         _openList.add(child);
         _openList.sort((a, b) => a.compareTo(b));
@@ -116,9 +116,9 @@ class DFAStar {
   }
 
   /// 从Open列表中查找结点
-  DFMapNode? findNodeInOpen(DFMapPosition? position) {
+  DFAStarNode? findNodeInOpen(DFTilePosition? position) {
     if (position == null || _openList.length == 0) return null;
-    for (DFMapNode node in _openList) {
+    for (DFAStarNode node in _openList) {
       if (node.position! == position) {
         return node;
       }
@@ -127,17 +127,17 @@ class DFAStar {
   }
 
   /// 计算H的估值：“曼哈顿”法，坐标分别取差值相加
-  int calcH(DFMapPosition end, DFMapPosition coord) {
+  int calcH(DFTilePosition end, DFTilePosition coord) {
     return ((end.x - coord.x).abs() + (end.y - coord.y).abs()) * DIRECT_VALUE;
   }
 
   /// 判断结点是否是最终结点
-  bool isEndNode(DFMapPosition end, DFMapPosition? position) {
+  bool isEndNode(DFTilePosition end, DFTilePosition? position) {
     return position != null && end == position;
   }
 
   /// 判断结点能否放入Open列表
-  bool canAddNodeToOpen(DFMap mapInfo, int x, int y) {
+  bool canAddNodeToOpen(DFAStarMap mapInfo, int x, int y) {
     /// 是否在地图中
     if (x < 0 || x >= mapInfo.width || y < 0 || y >= mapInfo.height) return false;
 
@@ -151,7 +151,7 @@ class DFAStar {
   }
 
   /// 判断坐标是否在close表中
-  bool isPositionInClose(DFMapPosition? position) {
+  bool isPositionInClose(DFTilePosition? position) {
     if (position == null) {
       return false;
     }
@@ -163,7 +163,7 @@ class DFAStar {
     if (_closeList.length == 0) {
       return false;
     }
-    for (DFMapNode node in _closeList) {
+    for (DFAStarNode node in _closeList) {
       if (node.position!.x == x && node.position!.y == y) {
         return true;
       }
@@ -173,7 +173,7 @@ class DFAStar {
 }
 
 /// 包含地图所需的所有输入数据
-class DFMap {
+class DFAStarMap {
   /// 二维数组的地图
   List<List<int>>? maps;
 
@@ -184,26 +184,26 @@ class DFMap {
   int height;
 
   /// 起始结点
-  DFMapNode start;
+  DFAStarNode start;
 
   /// 最终结点
-  DFMapNode end;
+  DFAStarNode end;
 
-  DFMap(this.maps, this.width, this.height, this.start, this.end);
+  DFAStarMap(this.maps, this.width, this.height, this.start, this.end);
 }
 
 /// 路径节点
-class DFMapNode {
-  DFMapPosition? position; // 坐标
-  DFMapNode? parent; // 父结点
+class DFAStarNode {
+  DFTilePosition? position; // 坐标
+  DFAStarNode? parent; // 父结点
   int G = 0; // G：是个准确的值，是起点到当前结点的代价
   int H = 0; // H：是个估值，当前结点到目的结点的估计代价
 
-  DFMapNode(int x, int y) {
-    this.position = new DFMapPosition(x, y);
+  DFAStarNode(int x, int y) {
+    this.position = new DFTilePosition(x, y);
   }
 
-  DFMapNode.newNode(DFMapPosition position, DFMapNode parent, int g, int h) {
+  DFAStarNode.newNode(DFTilePosition position, DFAStarNode parent, int g, int h) {
     this.position = position;
     this.parent = parent;
     this.G = g;
@@ -216,7 +216,7 @@ class DFMapNode {
   }
 
   /// 排序比较
-  int compareTo(DFMapNode other) {
+  int compareTo(DFAStarNode other) {
     /// 大于
     if (G + H > other.G + other.H) {
       return 1;
@@ -232,23 +232,3 @@ class DFMapNode {
   }
 }
 
-/// 坐标
-class DFMapPosition {
-  int x;
-  int y;
-
-  DFMapPosition(this.x, this.y);
-
-  @override
-  bool operator ==(Object other) {
-    if (other is DFMapPosition) {
-      return x == other.x && y == other.y;
-    }
-    return false;
-  }
-
-  @override
-  String toString() {
-    return "x:" + x.toString() + ",y:" + y.toString();
-  }
-}

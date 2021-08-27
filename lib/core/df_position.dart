@@ -29,6 +29,27 @@ class DFPosition {
   }
 }
 
+/// 瓦片位置
+class DFTilePosition {
+  int x;
+  int y;
+
+  DFTilePosition(this.x, this.y);
+
+  @override
+  bool operator ==(Object other) {
+    if (other is DFTilePosition) {
+      return x == other.x && y == other.y;
+    }
+    return false;
+  }
+
+  @override
+  String toString() {
+    return "x:" + x.toString() + ",y:" + y.toString();
+  }
+}
+
 /// 方位
 enum DFGravity {
   /// 左

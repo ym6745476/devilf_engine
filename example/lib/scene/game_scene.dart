@@ -51,7 +51,8 @@ class _GameSceneState extends State<GameScene> with TickerProviderStateMixin {
         DFCamera camera = DFCamera(rect: DFRect(0, 0, GameManager.visibleWidth, GameManager.visibleHeight));
 
         /// 定义主界面
-        this._gameWidget = DFGameWidget(camera: camera);
+        this._gameWidget =
+            DFGameWidget(size: Size(GameManager.visibleWidth, GameManager.visibleHeight), camera: camera);
 
         /// Logo精灵
         DFImageSprite logoSprite = await DFImageSprite.load("assets/images/sprite.png");
@@ -73,7 +74,8 @@ class _GameSceneState extends State<GameScene> with TickerProviderStateMixin {
         /// 演示精灵
         StoneSprite stoneSprite = StoneSprite();
         stoneSprite.scale = 4;
-        stoneSprite.position = DFPosition(MediaQuery.of(context).size.width / 2, MediaQuery.of(context).size.height / 2);
+        stoneSprite.position =
+            DFPosition(MediaQuery.of(context).size.width / 2, MediaQuery.of(context).size.height / 2);
 
         /// 将Logo精灵添加到主界面
         this._gameWidget!.addChild(logoSprite);
@@ -134,7 +136,7 @@ class _GameSceneState extends State<GameScene> with TickerProviderStateMixin {
       child: _loading
           ? _loadingWidget()
           : Stack(fit: StackFit.expand, children: <Widget>[
-              /// 游戏主界面
+              /// 游戏控件
               Positioned(
                 top: 0,
                 left: 0,
