@@ -6,6 +6,7 @@ class DFAction {
   static const String ATTACK = "ATTACK";
   static const String CASTING = "CASTING";
   static const String COLLECT = "COLLECT";
+  static const String PICKUP = "PICKUP";
   static const String DEATH = "DEATH";
   static const String TRACK = "TRACK";
   static const String EXPLODE = "EXPLODE";
