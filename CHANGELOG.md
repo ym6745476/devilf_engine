@@ -1,4 +1,5 @@
-## [0.1.0] - 2021/08/28.  
+## [0.1.0] - 2021/09/26. 
+* Update Flutter 2.5.0  
 * Optimize  
 * GameWidget Support GestureDetector  
 * Update GameRenderBox as  SpriteRenderBox  
